@@ -1,0 +1,44 @@
+add_action('pre_get_posts','search_filter');
+function search_filter($query) {	
+	if (!is_admin()) {
+    if ( $query->is_main_query() ) {			
+			if ($query->is_search) {				
+				$post_type = $_GET['type'];
+				if ( !$post_type ) { 
+					// default to post
+					
+					// ** MY ORIGNAL CODE
+					// $query->set('post_type', array( 'post' ) );				
+					
+					// ** SEARCHWP CODE
+					if ( $post_type=='qa_faqs' ) {
+						$swp_query = new SWP_Query(
+							array(
+								'engine' => 'post', 	// search engine
+							)
+						);
+					}										
+					
+				} else { // use specified type
+					
+					// ** MY ORIGNAL CODE
+					// $query->set('post_type', array( $post_type ) );
+					
+					// ** SEARCHWP CODE
+					if ( $post_type=='qa_faqs' ) {
+						$swp_query = new SWP_Query(
+							array(
+								'engine' => $post_type, 	// search engine
+							)
+						);
+					}
+					
+					
+					
+				}
+				
+			}
+		};
+	}
+    return $query;  
+}
